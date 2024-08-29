@@ -49,4 +49,9 @@ create_app = create_app_factory(
 )
 
 
+""" UWSGI Entry Points """
+ui = create_ui()
+api = create_api()
+app = create_app()
+
 
