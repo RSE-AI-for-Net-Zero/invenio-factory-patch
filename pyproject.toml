@@ -1,0 +1,16 @@
+[project]
+name = "invenio-factory-patch"
+version = "1.0.0"
+dependencies = []
+description = """
+	    invenio-ldapclient has to be loaded after invenio-accounts, though loading extension
+	    modules via entry-points does not off a way to enforce order of loading.
+
+	    This module also contains uwsgi entry points pointing to these factories.
+	    """
+
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
