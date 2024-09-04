@@ -14,3 +14,8 @@ description = """
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
+[project.optional-dependencies]
+dev = ["pytest", "coverage", "sphinx", "pip-tools"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
