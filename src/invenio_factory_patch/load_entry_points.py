@@ -1,5 +1,5 @@
 import sys
-from importlib.metadata import entry_points
+from importlib.metadata import entry_points as iter_entry_points
 
 
 '''
@@ -9,34 +9,25 @@ Input:
 
 (name, value, group)
 
-UnOrderedSegment0 iter[tuple[str,str,str]
-OrderedSegment tuple[str,str,str] 
+UnOrderedSegment0 iter[tuple[str,str]
+OrderedSegment tuple[str,str] 
 
 
 Output: List[Object]  
 '''
- 
-def _epg_to_set(group, _map=None):
-    eps = set()
-    _map = dict() if _map is None else _map
-    
-    for ep in entry_points()[group]:
-        attr_tup = (ep.name, ep.value, ep.group)
-        eps.add(attr_tup)
-        _map[attr_tup] = ep
-
-    return eps
-
 def _epgs_to_set(*groups):
-    eps = set()
-    _map = dict()
+    entry_points = iter_entry_points()
     
-    sets = (_epg_to_set(group, _map) for group in groups)
+    _eps = set()
+    _map = dict()
 
-    for _ in sets:
-        eps = eps.union(_)
-
-    return eps, _map
+    for group in groups:
+        for ep in entry_points[group]:
+            attr_tup = (ep.name, ep.group)
+            _eps.add(attr_tup)
+            _map.setdefault(attr_tup, []).append(ep)
+            
+    return _eps, _map
     
 
 def _epgs_to_semi_ordered_list(unordered_initial_segment,
@@ -59,12 +50,17 @@ def mod_list(unordered_initial_segment,
              ordered_middle_segment,
              *groups):
 
-    eps, _map = _epgs_to_set(*groups)
+    _eps, _map = _epgs_to_set(*groups)
     
-    m = _epgs_to_semi_ordered_list(unordered_initial_segment,
-                                   ordered_middle_segment,
-                                   eps)
+    attr_tups = _epgs_to_semi_ordered_list(unordered_initial_segment,
+                                           ordered_middle_segment,
+                                           _eps)
 
-    return [_map[_].load() for _ in m]
+    out = []
+
+    for a in attr_tups:
+        out.extend(_map[a])
+
+    return out
 
 
