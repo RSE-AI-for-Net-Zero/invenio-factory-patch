@@ -1,3 +1,5 @@
+from entry_point_util import entry_point_getter, get_partially_ordered_list
+
 from invenio_app.factory import (create_app_factory,
                                  config_loader,
                                  wsgi_proxyfix,
@@ -6,30 +8,33 @@ from invenio_app.factory import (create_app_factory,
                                  static_folder,
                                  static_url_path,
                                  app_class,
-                                 create_api as invenio_app_create_api)
+                                 create_api as _create_api)
 
-from invenio_ldapclient import InvenioLDAPClient
-from invenio_accounts import InvenioAccountsUI
 
-from .load_entry_points import mod_list
+def _get_ui_ext_eps():
+    ordered_ui_ext_eps = \
+        list(entry_point_getter(('invenio_ldapclient', None, 'invenio_base.apps'))) + \
+        list(entry_point_getter(('invenio_accounts_ui', None, 'invenio_base.apps')))
 
-eps = mod_list([], [('invenio_ldapclient', 'invenio_base.apps'),
-                    ('invenio_accounts_ui', 'invenio_base.apps')],
-               'invenio_base.apps')
 
-extensions = [ep.load() for ep in eps]
+    ui_ext_eps = get_partially_ordered_list(entry_point_getter((None, None, 'invenio_base.apps')),
+                                            set(),
+                                            ordered_ui_ext_eps)
 
-bps = mod_list([], [], 'invenio_base.blueprints')
+    return ui_ext_eps
 
-blueprints = [bp.load() for bp in bps]
+def _get_ui_bp_eps():
+    ui_bp_eps = entry_point_getter((None, None, 'invenio_base.blueprints'))
+
+    return ui_bp_eps
+
+
 
 create_ui = create_app_factory(
     'invenio',
     config_loader=config_loader,
-    #blueprint_entry_points=['invenio_base.blueprints'],
-    blueprints=blueprints,
-    #extension_entry_points=['invenio_base.apps'],
-    extensions=extensions,
+    blueprints=[ep.load() for ep in _get_ui_bp_eps()],
+    extensions=[ep.load() for ep in _get_ui_ext_eps()],
     converter_entry_points=['invenio_base.converters'],
     wsgi_factory=wsgi_proxyfix(),
     instance_path=instance_path,
@@ -43,16 +48,15 @@ create_ui = create_app_factory(
    by invenio_base.app.create_app_factory"""
 
 
-create_api = invenio_app_create_api
+create_api = _create_api
 """Since we don't yet have ldap auth for the api, we'll use invenio's factory for now."""
+
 
 create_app = create_app_factory(
     'invenio',
     config_loader=config_loader,
-    #blueprint_entry_points=['invenio_base.blueprints'],
-    blueprints=blueprints,
-    #extension_entry_points=['invenio_base.apps'],
-    extensions=extensions,
+    blueprints=[ep.load() for ep in _get_ui_bp_eps()],
+    extensions=[ep.load() for ep in _get_ui_ext_eps()],
     converter_entry_points=['invenio_base.converters'],
     wsgi_factory=wsgi_proxyfix(create_wsgi_factory({'/api': create_api})),
     instance_path=instance_path,

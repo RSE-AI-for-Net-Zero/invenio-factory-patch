@@ -5,10 +5,6 @@
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
-from .factory import create_app
+from .factory import create_api
 
-application = create_app()
-"""Combined UI + REST Flask application.
-
-REST API is mounted under ``/api``.
-"""
+application = create_api()
