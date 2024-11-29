@@ -16,7 +16,7 @@ config files.  `invenio-factory-patch` replaces all things the factories `create
 ## Usage
 1. add as a dependency
 2. add `config_ui` and `config_api` files to the app's instance path
-3. instead of, e.g., doing this
+3. anywhere where you refer to something in `invenio_app`, refer instead to its counterpart in `invenio_factory_patch`.  E.g., rather than do this
    ```
    from invenio_app.celery import celery
    ```
@@ -25,16 +25,33 @@ config files.  `invenio-factory-patch` replaces all things the factories `create
    ```
    from invenio_factory_patch.celery import celery
    ```
-   or instead of specifiy the uWSGI entry point in `uwsgi_ui.ini` as
+   or rather than specifiying the uWSGI entry point in `uwsgi_ui.ini` as
 
    ```
    module = invenio_app.wsgi_ui:application
    ```
-   specify it as
+   specify it instead as
 
    ```
    module = invenio_factory_patch.wsgi_ui:application
    ```
-   
 
 ## Development
+1. Python 3.8 or 3.9 are required (3.10 onward contains a better importlib.metadata API anyway)
+2. Clone the repo, create a virtual environment and install the package with dev dependencies
+   ```
+   cd invenio-factory-patch
+   python -m venv .venv
+   . .venv/bin/activate
+   pip install --upgrade pip && pip install -e '.[dev]'
+   ```
+3. Build the docs
+   ```
+   cd docs/ && make html
+   ```
+4. Run the tests and check coverage
+   ```
+   coverage run -m pytest
+   coverage html
+   firefox htmlcov/index.html
+   ```
