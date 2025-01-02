@@ -12,7 +12,7 @@ from invenio_app.factory import (
     app_class
 )
 
-ui_extension_entry_points = list(split_entry_points("invenio_base.apps", "config_ui"))
+ui_extension_entry_points = list(split_entry_points("invenio_base.apps", "invenio_factory_patch_config_ui"))
 
 create_ui = create_app_factory(
     "invenio",
