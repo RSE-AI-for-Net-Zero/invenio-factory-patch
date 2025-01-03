@@ -190,7 +190,7 @@ def setup_instance():
 
     names = ["invenio_ldapclient_ui", "invenio_accounts_ui"]
 
-    with open(os.path.join(tmp_instance_dir, "config_ui"), "w") as f:
+    with open(os.path.join(tmp_instance_dir, "invenio_factory_patch_ui.cfg"), "w") as f:
         for name in names:
             f.write("%s\n" % name)
 

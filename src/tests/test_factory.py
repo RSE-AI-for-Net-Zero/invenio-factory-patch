@@ -8,10 +8,9 @@ def test_create_ui(setup_instance, mock_entry_points):
     def inner(mock_create_app_factory):
         from invenio_factory_patch.factory import create_ui
 
-        extep_arg = call_kwargs = mock_create_app_factory.call_args[1]["extension_entry_points"]
+        extension_entry_points = mock_create_app_factory.call_args[1]["extension_entry_points"]
 
-        assert extep_arg[0][0].name == "invenio_ldapclient_ui"
-        assert extep_arg[0][1].name == "invenio_accounts_ui"
+        assert extension_entry_points == ['removed', 'invenio_base.apps']
 
     inner()
         

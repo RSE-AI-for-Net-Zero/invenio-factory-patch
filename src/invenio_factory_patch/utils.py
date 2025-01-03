@@ -51,4 +51,5 @@ def split_entry_points(group: str, config: str):
                                                                   remaining,
                                                                   removed)
 
-    return removed, remaining
+    return {'removed': removed,
+            group: remaining}

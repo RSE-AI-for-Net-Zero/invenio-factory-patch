@@ -71,11 +71,11 @@ def test_read_names_from_config(setup_instance):
 
     _instance_path = instance_path()
 
-    with open(os.path.join(_instance_path, "config_ui"), "r") as f:
+    with open(os.path.join(_instance_path, "invenio_factory_patch_ui.cfg"), "r") as f:
         assert next(f).rstrip() == "invenio_ldapclient_ui"
         assert next(f).rstrip() == "invenio_accounts_ui"
 
-    names = read_names_from_config("config_ui")
+    names = read_names_from_config("invenio_factory_patch_ui.cfg")
     assert names == ["invenio_ldapclient_ui", "invenio_accounts_ui"]
 
 
@@ -87,7 +87,9 @@ def test_split_entry_points(setup_instance, mock_entry_points):
         assert "invenio_ldapclient_ui" in [ep.name for ep in grp]
         assert "invenio_accounts_ui" in [ep.name for ep in grp]
 
-        first, second = split_entry_points("invenio_base.apps", "config_ui")
+        _split_eps = split_entry_points("invenio_base.apps", "invenio_factory_patch_ui.cfg")
+        first = _split_eps['removed']
+        second = _split_eps['invenio_base.apps']
 
         assert len(first) + len(second) == len(grp)
 
