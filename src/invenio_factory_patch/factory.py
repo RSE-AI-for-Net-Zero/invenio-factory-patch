@@ -1,4 +1,9 @@
+from unittest.mock import patch
 from .utils import instance_path, split_entry_points
+from .loader import app_loader
+
+_loader_patch = patch('invenio_base.app.app_loader', app_loader)
+_loader_patch.start()
 
 from invenio_app.factory import (
     create_app_factory,
@@ -12,7 +17,9 @@ from invenio_app.factory import (
     app_class
 )
 
-ui_extension_entry_points = list(split_entry_points("invenio_base.apps", "invenio_factory_patch_ui.cfg"))
+ui_extension_entry_points = split_entry_points("invenio_base.apps", "invenio_factory_patch_ui.cfg")
+api_extension_entry_points = split_entry_points("invenio_base.api_apps", "invenio_factory_patch_api.cfg")
+
 
 create_ui = create_app_factory(
     "invenio",
@@ -31,10 +38,18 @@ create_ui = create_app_factory(
    everything else since entry_points loaded before modules by factories created
    by invenio_base.app.create_app_factory"""
 
-
-create_api = base_create_api
-"""Since we don't yet have ldap auth for the api, we'll use invenio's factory for now."""
-
+create_api = create_app_factory(
+    'invenio',
+    config_loader=config_loader,
+    blueprint_entry_points=['invenio_base.api_blueprints'],
+    extension_entry_points=api_extension_entry_points,
+    converter_entry_points=['invenio_base.api_converters'],
+    wsgi_factory=wsgi_proxyfix(),
+    instance_path=instance_path,
+    root_path=instance_path,
+    app_class=app_class(),
+)
+"""Flask application factory for Invenio REST API."""
 
 create_app = create_app_factory(
     "invenio",
@@ -49,4 +64,6 @@ create_app = create_app_factory(
     static_url_path=static_url_path(),
     app_class=app_class(),
 )
+
+
 
