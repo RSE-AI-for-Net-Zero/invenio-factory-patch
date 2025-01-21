@@ -39,9 +39,12 @@ def read_names_from_config(config: str):
     return names
 
 def split_entry_points(group: str, config: str):
-    names: List[str] = read_names_from_config(config)
-
     group_in: Iterable[EntryPoint] = entry_points()[group]
+    
+    try:
+        names: List[str] = read_names_from_config(config)
+    except FileNotFoundError:
+        return {group: group_in}
 
     removed: List[EntryPoint]  = []
     remaining = group_in
