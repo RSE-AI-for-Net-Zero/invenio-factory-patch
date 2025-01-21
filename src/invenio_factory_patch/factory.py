@@ -1,5 +1,6 @@
 from unittest.mock import patch
-from .utils import instance_path, split_entry_points
+from importlib_metadata import entry_points
+from .utils import instance_path, split_entry_points, grab_and_remove_from_epgroup_by_name as grab
 from .loader import app_loader
 
 _loader_patch = patch('invenio_base.app.app_loader', app_loader)
@@ -38,11 +39,15 @@ create_ui = create_app_factory(
    everything else since entry_points loaded before modules by factories created
    by invenio_base.app.create_app_factory"""
 
+_, remaining = grab('invenio_rdm_records',
+                    entry_points(group = 'invenio_base.api_apps'))
+                                                          
+
 create_api = create_app_factory(
     'invenio',
     config_loader=config_loader,
     blueprint_entry_points=['invenio_base.api_blueprints'],
-    extension_entry_points=api_extension_entry_points,
+    extension_entry_points={'invenio_base.api_apps_prime': remaining},
     converter_entry_points=['invenio_base.api_converters'],
     wsgi_factory=wsgi_proxyfix(),
     instance_path=instance_path,
