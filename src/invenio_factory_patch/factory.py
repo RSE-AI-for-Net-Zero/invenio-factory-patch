@@ -17,9 +17,14 @@ from invenio_app.factory import (
     create_api as base_create_api,
     app_class
 )
+_, api_apps_prime = grab('invenio_rdm_records',
+                         entry_points(group = 'invenio_base.api_apps'))
 
-ui_extension_entry_points = split_entry_points("invenio_base.apps", "invenio_factory_patch_ui.cfg")
-api_extension_entry_points = split_entry_points("invenio_base.api_apps", "invenio_factory_patch_api.cfg")
+_, ui_apps_prime = grab('invenio_rdm_records',
+                         entry_points(group = 'invenio_base.apps'))
+
+ui_extension_entry_points = split_entry_points(ui_apps_prime, "invenio_factory_patch_ui.cfg")
+api_extension_entry_points = split_entry_points(api_apps_prime, "invenio_factory_patch_api.cfg")
 
 
 create_ui = create_app_factory(
@@ -39,15 +44,11 @@ create_ui = create_app_factory(
    everything else since entry_points loaded before modules by factories created
    by invenio_base.app.create_app_factory"""
 
-_, remaining = grab('invenio_rdm_records',
-                    entry_points(group = 'invenio_base.api_apps'))
-                                                          
-
 create_api = create_app_factory(
     'invenio',
     config_loader=config_loader,
     blueprint_entry_points=['invenio_base.api_blueprints'],
-    extension_entry_points={'invenio_base.api_apps_prime': remaining},
+    extension_entry_points={'invenio_base.api_apps_prime': api_apps_prime},
     converter_entry_points=['invenio_base.api_converters'],
     wsgi_factory=wsgi_proxyfix(),
     instance_path=instance_path,
