@@ -6,13 +6,11 @@ def _loader(app, init_func, entry_points=None, modules=None):
     
         .. versionadded: 1.0.0
         """
-    #print('_loader called')
     if entry_points:
         for group in entry_points:
             for ep in entry_points[group]:
                 try:
-                    init_func(ep.load())
-                    #print('{} loaded'.format(ep))
+                    init_func(ep.load())        
                 except Exception:
                     app.logger.error(f"Failed to initialize entry point: {ep}")
                     raise
