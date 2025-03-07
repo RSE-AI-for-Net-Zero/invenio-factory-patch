@@ -10,10 +10,10 @@
 
 from flask_celeryext import create_celery_app
 
-from .factory import create_app
+from .factory import create_ui
 
 celery = create_celery_app(
-    create_app(
+    create_ui(
         SENTRY_TRANSPORT="raven.transport.http.HTTPTransport",
         RATELIMIT_ENABLED=False,
     )
