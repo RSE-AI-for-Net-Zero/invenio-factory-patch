@@ -34,7 +34,7 @@ create_ui = create_app_factory(
     extension_entry_points=ui_extension_entry_points,
     converter_entry_points=["invenio_base.converters"],
     finalize_app_entry_points=["invenio_base.finalize_app"],
-    wsgi_factory=wsgi_proxyfix(),
+    #wsgi_factory=wsgi_proxyfix(),
     instance_path=instance_path,
     static_folder=static_folder,
     root_path=instance_path,
@@ -52,7 +52,7 @@ create_api = create_app_factory(
     extension_entry_points=api_extension_entry_points,
     converter_entry_points=['invenio_base.api_converters'],
     finalize_app_entry_points=["invenio_base.api_finalize_app"],
-    wsgi_factory=wsgi_proxyfix(),
+    #wsgi_factory=wsgi_proxyfix(),
     instance_path=instance_path,
     root_path=instance_path,
     app_class=app_class(),
@@ -66,13 +66,10 @@ create_app = create_app_factory(
     extension_entry_points=ui_extension_entry_points,
     converter_entry_points=["invenio_base.converters"],
     finalize_app_entry_points=["invenio_base.finalize_app"],
-    wsgi_factory=wsgi_proxyfix(create_wsgi_factory({"/api": create_api})),
+    #wsgi_factory=wsgi_proxyfix(create_wsgi_factory({"/api": create_api})),
     instance_path=instance_path,
     static_folder=static_folder,
     root_path=instance_path,
     static_url_path=static_url_path(),
     app_class=app_class(),
 )
-
-
-
