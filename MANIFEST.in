@@ -1,0 +1,2 @@
+include src/invenio_factory_patch/invenio_factory_patch_ui.cfg
+include src/invenio_factory_patch/invenio_factory_patch_api.cfg
