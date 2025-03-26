@@ -41,9 +41,12 @@ create_ui = create_app_factory(
     static_url_path=static_url_path(),
     app_class=app_class(),
 )
-"""Flask application factory for Invenio UI.  Ensures invenio-ldapclient is loaded after 
-   everything else since entry_points loaded before modules by factories created
-   by invenio_base.app.create_app_factory"""
+"""
+Flask application factory for Invenio UI.  Use this in place of :code:`invenio_app.factory.create_ui` to ensure that 
+
+- :code:`InvenioLDAPClientUI` is loaded **before** :code:`InvenioAccountsUI`
+- :code:`InvenioDomainRDMRecords` is loaded **in place of** :code:`InvenioRDMRecords`
+"""
 
 create_api = create_app_factory(
     'invenio',
@@ -57,7 +60,12 @@ create_api = create_app_factory(
     root_path=instance_path,
     app_class=app_class(),
 )
-"""Flask application factory for Invenio REST API."""
+"""
+Flask application factory for Invenio API.  Use this in place of :code:`invenio_app.factory.create_api` to ensure that 
+
+- :code:`InvenioLDAPClientAPI` is loaded **before** :code:`InvenioAccountsAPI`
+- :code:`InvenioDomainRDMRecords` is loaded **in place of** :code:`InvenioRDMRecords`
+"""
 
 create_app = create_app_factory(
     "invenio",
@@ -73,3 +81,10 @@ create_app = create_app_factory(
     static_url_path=static_url_path(),
     app_class=app_class(),
 )
+"""
+Flask application factory for Invenio app.  Use this in place of :code:`invenio_app.factory.create_app` to ensure that 
+
+- :code:`InvenioLDAPClientUI` is loaded **before** :code:`InvenioAccountsUI`
+- :code:`InvenioLDAPClientAPI` is loaded **before** :code:`InvenioAccountsAPI` in the :code:`/api` mount
+- :code:`InvenioDomainRDMRecords` is loaded **in place of** :code:`InvenioRDMRecords`
+"""

@@ -6,12 +6,31 @@
 Invenio factory patch documentation
 ===================================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+Replaces the factory functions, celery and wsgi entry points defined in :code:`invenio_app` to ensure certain extension modules are loaded in a specific order.  Also provides a replacement for the *invenio* CLI instance management tool.
 
+Entry point names listed in :file:`invenio_factory_patch_ui.cfg` are loaded (in the order listed) before all other entry points in group :code:`invenio_base.apps`.  Similarly, entry point names listed in :file:`invenio_factory_patch_api.cfg` are loaded (in the order listed) before all other entry points in group :code:`invenio_base.api_apps`. 
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+.. automodule:: invenio_factory_patch.factory
+   :members:
+
+.. automodule:: invenio_factory_patch.celery
+   :members:
+      
+.. automodule:: invenio_factory_patch.celery_ui
+   :members:
+
+.. automodule:: invenio_factory_patch.celery_api
+   :members:
+
+.. automodule:: invenio_factory_patch.wsgi
+   :members:
+      
+.. automodule:: invenio_factory_patch.wsgi_ui
+   :members:
+
+.. automodule:: invenio_factory_patch.wsgi_api
+   :members:
+
+.. automodule:: invenio_factory_patch.cli
+   :members:
 

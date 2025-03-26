@@ -8,3 +8,8 @@
 from .factory import create_ui
 
 application = create_ui()
+"""
+Combined UI Flask application.
+
+Replaces :code:`invenio_app` factory function.
+"""

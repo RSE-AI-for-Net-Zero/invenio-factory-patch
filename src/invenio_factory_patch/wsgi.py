@@ -11,4 +11,6 @@ application = create_app()
 """Combined UI + REST Flask application.
 
 REST API is mounted under ``/api``.
+
+Replaces :code:`invenio_app` factory function.
 """

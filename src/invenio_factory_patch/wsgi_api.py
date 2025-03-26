@@ -8,3 +8,9 @@
 from .factory import create_api
 
 application = create_api()
+"""
+Combined API Flask application.
+
+Replaces :code:`invenio_app` factory function.
+"""
+

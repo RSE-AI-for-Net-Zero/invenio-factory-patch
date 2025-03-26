@@ -17,7 +17,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project.optional-dependencies]
-dev = ["pytest", "coverage", "sphinx",
+dev = ["pytest", "coverage", "sphinx", "sphinx-rtd-theme",
        "pip-tools", "ruff", "pylint", "mypy"]
 
 [project.scripts]
